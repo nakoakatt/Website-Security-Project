@@ -1,0 +1,28 @@
+name: Dependency Validation Workflow
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  dependency-check:
+    name: Dependency Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+
+      - name: Run OWASP Dependency Check
+        run: |
+          curl -LO 
+https://github.com/jeremylong/DependencyCheck/releases/download/v8.2.1/dependency-check-8.2.1-release.zip
+          unzip dependency-check-8.2.1-release.zip
+          ./dependency-check/bin/dependency-check.sh --project "JuiceShop" --scan ./ --format "HTML" 
+--out ./dependency-report.html
